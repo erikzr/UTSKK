@@ -1,0 +1,35 @@
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_blobs
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+from sklearn.preprocessing import StandardScaler
+import numpy as np
+
+# Generating synthetic data
+features, true_label = make_blobs(
+    n_samples=48,
+    centers=8,
+    cluster_std=2.75,
+    random_state=42
+)
+
+# Standardizing features
+standard_scaler = StandardScaler()
+scaled_features = standard_scaler.fit_transform(features)
+
+# Applying KMeans clustering
+kmeans = KMeans(
+    init="random", 
+    n_clusters=8,
+    n_init=10, 
+    max_iter=100, 
+    random_state=41
+)
+kmeans.fit(scaled_features)
+
+# Choose a contrasting color map
+cmap = plt.cm.get_cmap('tab10')
+
+# Plotting the clusters with contrasting colors
+plt.scatter(scaled_features[:,0], scaled_features[:,1], s=50, alpha=1, cmap=cmap, c=kmeans.labels_)
+plt.show()
